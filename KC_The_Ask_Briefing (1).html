@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ask — Keith Clinkscales | FAMU NAA Founding Architect Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:    #080808;
+    --dark-bg:  #111111;
+    --mid-bg:   #1a1a1a;
+    --card-bg:  #212121;
+    --border:   #2e2e2e;
+    --orange:   #E87722;
+    --orange-dim: #8b4713;
+    --green:    #2d7a3a;
+    --green-bright: #3aaa4e;
+    --white:    #f0f0f0;
+    --gray:     #888888;
+    --light-gray: #c0c0c0;
+    --grid-color: rgba(255,255,255,0.03);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark-bg);
+    color: var(--light-gray);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Blueprint grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ── HEADER ──────────────────────────────────────────────────── */
+  .header {
+    background: var(--black);
+    border-bottom: 3px solid var(--orange);
+    padding: 60px 48px 48px;
+    margin: 0 -24px 0;
+    position: relative;
+    overflow: hidden;
+    animation: fadeDown 0.8s ease forwards;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(232,119,34,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .header-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .header-meta span {
+    margin: 0 12px;
+    opacity: 0.5;
+  }
+
+  .header-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 120px);
+    color: var(--orange);
+    letter-spacing: 0.02em;
+    line-height: 0.9;
+    margin-bottom: 16px;
+  }
+
+  .header-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--white);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-left: 3px solid var(--orange);
+    padding-left: 16px;
+    margin-bottom: 32px;
+  }
+
+  .header-byline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--gray);
+    font-style: italic;
+  }
+
+  /* Corner decoration */
+  .corner-mark {
+    position: absolute;
+    top: 20px; right: 48px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gray);
+    opacity: 0.4;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── SECTION HEADERS ─────────────────────────────────────────── */
+  .section {
+    margin-top: 72px;
+    animation: fadeUp 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .section:nth-child(2)  { animation-delay: 0.1s; }
+  .section:nth-child(3)  { animation-delay: 0.2s; }
+  .section:nth-child(4)  { animation-delay: 0.3s; }
+  .section:nth-child(5)  { animation-delay: 0.4s; }
+  .section:nth-child(6)  { animation-delay: 0.5s; }
+  .section:nth-child(7)  { animation-delay: 0.6s; }
+  .section:nth-child(8)  { animation-delay: 0.7s; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--orange);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-rule {
+    height: 2px;
+    background: linear-gradient(90deg, var(--orange) 0%, var(--border) 100%);
+    margin-bottom: 32px;
+  }
+
+  .section-rule.green {
+    background: linear-gradient(90deg, var(--green-bright) 0%, var(--border) 100%);
+  }
+
+  /* ── BOTTOM LINE ─────────────────────────────────────────────── */
+  .bottom-line h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 80px);
+    color: var(--white);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+  }
+
+  .bottom-line h2 .accent { color: var(--orange); }
+
+  .bottom-line p {
+    margin-top: 24px;
+    font-size: 17px;
+    color: var(--light-gray);
+    max-width: 680px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── TIER TABLE ──────────────────────────────────────────────── */
+  .tiers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .tier {
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tier.featured { background: #1a0e04; }
+
+  .tier-header {
+    padding: 14px 20px;
+    background: var(--green);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-align: center;
+  }
+
+  .tier.featured .tier-header {
+    background: var(--orange);
+  }
+
+  .tier-body {
+    padding: 24px 20px;
+    flex: 1;
+  }
+
+  .tier-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--green-bright);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .tier.featured .tier-amount { color: var(--orange); }
+
+  .tier-desc {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.7;
+  }
+
+  .tier-desc li {
+    list-style: none;
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .tier-desc li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-size: 11px;
+  }
+
+  .tier.featured .tier-desc li::before { color: var(--orange); }
+
+  .tier-callout {
+    background: #1a0e04;
+    border: 1px solid var(--orange);
+    border-top: none;
+    padding: 16px 24px;
+    text-align: center;
+  }
+
+  .tier-callout p {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+
+  .tier-callout strong {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--orange);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── VALUE EXCHANGE ──────────────────────────────────────────── */
+  .value-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .value-item {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    background: var(--mid-bg);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+
+  .value-item:hover { background: #222; }
+
+  .value-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    writing-mode: vertical-lr;
+    padding: 16px 0;
+  }
+
+  .value-content {
+    padding: 18px 24px;
+  }
+
+  .value-title {
+    font-weight: 600;
+    color: var(--white);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .value-detail {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ── STEPS ───────────────────────────────────────────────────── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    background: var(--card-bg);
+    border-left: 3px solid var(--green);
+    transition: transform 0.2s;
+  }
+
+  .step:hover { transform: translateX(4px); }
+
+  .step.action {
+    background: #1a0e04;
+    border-left-color: var(--orange);
+  }
+
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--green);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--white);
+  }
+
+  .step.action .step-num {
+    background: var(--orange);
+  }
+
+  .step-content {
+    padding: 20px 24px;
+  }
+
+  .step-title {
+    font-weight: 600;
+    color: var(--white);
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+
+  .step.action .step-title { color: var(--orange); }
+
+  .step-detail {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ── THE ASK CALLOUT ─────────────────────────────────────────── */
+  .ask-block {
+    background: var(--mid-bg);
+    border-top: 3px solid var(--green-bright);
+    border-bottom: 3px solid var(--green-bright);
+    padding: 52px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ask-block::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(58,170,78,0.05) 0%, transparent 70%);
+  }
+
+  .ask-block .ask-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gray);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .ask-block .ask-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    margin-bottom: 28px;
+  }
+
+  .ask-block blockquote {
+    font-size: 22px;
+    font-style: italic;
+    color: var(--light-gray);
+    line-height: 1.5;
+    max-width: 620px;
+    margin: 0 auto 28px;
+    font-weight: 300;
+  }
+
+  .ask-block .ask-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--orange);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: rgba(232,119,34,0.08);
+    border: 1px solid rgba(232,119,34,0.3);
+    display: inline-block;
+    padding: 12px 24px;
+  }
+
+  /* ── OBJECTIONS TABLE ────────────────────────────────────────── */
+  .objections {
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .obj-header {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+  }
+
+  .obj-header div {
+    padding: 12px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .obj-header div:first-child { background: var(--orange); }
+  .obj-header div:last-child  { background: var(--green); }
+
+  .obj-row {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    border-top: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .obj-row:hover { background: rgba(255,255,255,0.02); }
+
+  .obj-q, .obj-a {
+    padding: 20px 20px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .obj-q {
+    color: var(--light-gray);
+    font-style: italic;
+    border-right: 1px solid var(--border);
+    background: var(--card-bg);
+  }
+
+  .obj-a {
+    color: var(--gray);
+    background: var(--mid-bg);
+  }
+
+  /* ── CLOSING ─────────────────────────────────────────────────── */
+  .closing {
+    background: var(--black);
+    border-top: 3px solid var(--orange);
+    padding: 56px 48px;
+    margin: 72px -24px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .closing::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center bottom, rgba(232,119,34,0.06) 0%, transparent 60%);
+  }
+
+  .closing-lines {
+    position: relative;
+    z-index: 1;
+  }
+
+  .closing-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: 0.05em;
+    line-height: 1.15;
+    margin: 6px 0;
+  }
+
+  .closing-line.white  { color: var(--white); }
+  .closing-line.orange { color: var(--orange); }
+  .closing-line.green  { color: var(--green-bright); }
+
+  .closing-byline {
+    margin-top: 32px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+  }
+
+  /* ── PRINT BUTTON ────────────────────────────────────────────── */
+  .print-bar {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+  }
+
+  .print-btn {
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    padding: 12px 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(232,119,34,0.3);
+  }
+
+  .print-btn:hover {
+    background: #ff8c33;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(232,119,34,0.4);
+  }
+
+  /* ── ANIMATIONS ──────────────────────────────────────────────── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .tiers { grid-template-columns: 1fr; }
+    .obj-header, .obj-row { grid-template-columns: 1fr; }
+    .obj-q { border-right: none; border-bottom: 1px solid var(--border); }
+    .header, .closing { padding-left: 24px; padding-right: 24px; margin-left: -24px; margin-right: -24px; }
+    .ask-block { padding: 36px 24px; }
+    .ask-block blockquote { font-size: 18px; }
+  }
+
+  /* ── PRINT ───────────────────────────────────────────────────── */
+  @media print {
+    body::before, body::after { display: none; }
+    .print-bar { display: none; }
+    .section { opacity: 1 !important; animation: none !important; }
+    .header { animation: none !important; }
+    body { background: #111; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button class="print-btn" onclick="window.print()">⊞ Print / Save PDF</button>
+</div>
+
+<header class="header">
+  <div class="corner-mark">Private &amp; Confidential</div>
+  <div class="header-meta">
+    FAMU NAA <span>/</span> Founding Architect Brief <span>/</span> Prepared for Keith Clinkscales <span>/</span> KTC Ventures
+  </div>
+  <div class="header-title">THE ASK</div>
+  <div class="header-subtitle">Closing the Loop — FAMU NAA Founding Architect Brief</div>
+  <div class="header-byline">Artisha R. Polk &nbsp;|&nbsp; President, FAMU National Alumni Association &nbsp;|&nbsp; Forward Together</div>
+</header>
+
+<div class="container">
+
+  <!-- 01 THE BOTTOM LINE -->
+  <div class="section">
+    <div class="section-label">// 01 — The Bottom Line</div>
+    <div class="section-rule"></div>
+    <div class="bottom-line">
+      <h2>NOT A CHECK.<br><span class="accent">A CO-BUILD.</span></h2>
+      <p>This is not a donation request. This is an invitation to put your fingerprints on the platform that defines how FAMU tells its story for the next generation. We are not asking for your money first — we are asking for your vision, your name, and your network. The capital follows the commitment.</p>
+    </div>
+  </div>
+
+  <!-- 02 INVESTMENT TIERS -->
+  <div class="section">
+    <div class="section-label">// 02 — Investment Tiers</div>
+    <div class="section-rule"></div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-header">Strategic Anchor</div>
+        <div class="tier-body">
+          <div class="tier-amount">$25k</div>
+          <ul class="tier-desc">
+            <li>Funds early-stage launch &amp; catalyst match</li>
+            <li>Prioritizes foundational setup</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tier">
+        <div class="tier-header">Seed Investor</div>
+        <div class="tier-body">
+          <div class="tier-amount">$50k</div>
+          <ul class="tier-desc">
+            <li>Funds core digital build</li>
+            <li>Prioritizes development of the digital platform</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tier featured">
+        <div class="tier-header">Founding Architect</div>
+        <div class="tier-body">
+          <div class="tier-amount">$100k–$250k</div>
+          <ul class="tier-desc">
+            <li>Multi-year sustainability &amp; strategic oversight</li>
+            <li>Eternal Flame content hub</li>
+            <li>Executive Producer credit on documentary projects</li>
+            <li>Named Scholarship Award</li>
+            <li>Platform role at HBCU signature events</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tier-callout">
+      <p>The tier we are presenting to you today:</p>
+      <strong>FOUNDING ARCHITECT &nbsp;//&nbsp; $100k seed to unlock $250k+ ARR</strong>
+    </div>
+  </div>
+
+  <!-- 03 VALUE EXCHANGE -->
+  <div class="section">
+    <div class="section-label">// 03 — The Value Exchange: What You Get</div>
+    <div class="section-rule"></div>
+    <div class="value-list">
+      <div class="value-item">
+        <div class="value-icon">EP</div>
+        <div class="value-content">
+          <div class="value-title">Executive Producer Credit</div>
+          <div class="value-detail">Full EP credit on the Eternal Flame documentary series — the "30 for 30" of FAMU. Your name on the most significant storytelling project in the institution's modern history.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">SC</div>
+        <div class="value-content">
+          <div class="value-title">Named Scholarship</div>
+          <div class="value-detail">The Keith Clinkscales Excellence in Storytelling Award — presented annually to a deserving SJGC student. Your legacy embedded in the next generation of Rattler journalists.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">SA</div>
+        <div class="value-content">
+          <div class="value-title">Strategic Advisor Listing</div>
+          <div class="value-detail">Formal recognition as Founding Strategic Advisor on all NAA materials, communications, and the platform itself.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">PL</div>
+        <div class="value-content">
+          <div class="value-title">Platform &amp; Stage</div>
+          <div class="value-detail">Featured co-host role at signature HBCU moments of your choosing: Orange Blossom Classic, Florida Classic, or FAMU Homecoming. Your platform to amplify the causes you have built your career around.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">LF</div>
+        <div class="value-content">
+          <div class="value-title">Low Friction</div>
+          <div class="value-detail">Advisory only. Strategic guidance, not operational management. Quarterly check-ins, one event appearance per year. We are not asking for a time commitment that conflicts with KTC Ventures.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 THREE STEPS -->
+  <div class="section">
+    <div class="section-label">// 04 — The Meeting Close: Three Steps From This Moment</div>
+    <div class="section-rule"></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Verbal Commitment Today</div>
+          <div class="step-detail">Signal your interest in serving as Founding Architect. No paperwork. No transfer. Just a yes.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Follow-Up in Two Weeks</div>
+          <div class="step-detail">We schedule a 30-minute working session to review the Founding Architect Agreement and the 18-month Revenue Model together.</div>
+        </div>
+      </div>
+      <div class="step action">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Founding Architect Agreement Signed</div>
+          <div class="step-detail">The $50k seed investment is activated. Your name goes on the platform. The build begins.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 THE SPECIFIC ASK -->
+  <div class="section">
+    <div class="section-label">// 05 — The Specific Ask</div>
+    <div class="section-rule green"></div>
+    <div class="ask-block">
+      <div class="ask-eyebrow">The only action item leaving this room</div>
+      <div class="ask-label">THE ASK IS SIMPLE.</div>
+      <blockquote>
+        "Keith — can we schedule a follow-up in two weeks to review the Founding Architect Agreement together?"
+      </blockquote>
+      <div class="ask-cta">That is the only action item leaving this room.</div>
+    </div>
+  </div>
+
+  <!-- 06 OBJECTIONS -->
+  <div class="section">
+    <div class="section-label">// 06 — If He Pushes Back</div>
+    <div class="section-rule"></div>
+    <div class="objections">
+      <div class="obj-header">
+        <div>The Objection</div>
+        <div>The Response</div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"Doesn't the Foundation do this?"</div>
+        <div class="obj-a">The Foundation is the stewardship arm — they manage the endowment. We are the activation arm. We build the content engine that feeds them. Kenneth Neighbors and Twuanna Ward do incredible work protecting assets. We're building the marketing engine that creates new ones.</div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"Is the $250k ARR target realistic?"</div>
+        <div class="obj-a">We moved away from aspirational numbers. 7,500 paying members at tiered dues plus one corporate sponsor pilot gets us there. The math is in the Revenue Model — I'll leave it with you today. It's not aspirational, it's modeled.</div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"How much of my time does this actually require?"</div>
+        <div class="obj-a">Advisory only. Quarterly check-ins, one event appearance per year, your name on the platform. We are not asking for a time commitment that conflicts with KTC Ventures. Your voice when it matters — that is the ask.</div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"Why me specifically — why now?"</div>
+        <div class="obj-a">Because you built the 30 for 30. Because you founded The Shadow League at the intersection of sports, race, and culture. Because you are a FAMU Magna Cum Laude graduate who already sits on the Foundation Board. We didn't build this role and go looking for someone. We knew who we needed first.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- CLOSING -->
+<footer class="closing">
+  <div class="closing-lines">
+    <div class="closing-line white">FAMU HAS THE STORY.</div>
+    <div class="closing-line orange">YOU HAVE THE INFRASTRUCTURE.</div>
+    <div class="closing-line green">WE ARE ASKING YOU TO BUILD THE ENGINE.</div>
+  </div>
+  <div class="closing-byline">
+    Artisha R. Polk &nbsp;//&nbsp; President, FAMU NAA &nbsp;//&nbsp; Forward Together &nbsp;//&nbsp; Private &amp; Confidential
+  </div>
+</footer>
+
+</body>
+</html>
